@@ -1,0 +1,5 @@
+webserver/backend/.eggs/
+webserver/backend/backend.egg-info/
+webserver/backend/backend/__pycache__/
+webserver/backend/backend/controller/__pycache__/
+webserver/backend/build/
