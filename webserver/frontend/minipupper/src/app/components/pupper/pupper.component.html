@@ -1,0 +1,12 @@
+<mat-card class="pupper-card">
+  <mat-card-content>
+    <h1>Pupper</h1>
+    <p>
+      <mat-button-toggle-group (change)="onClick($event.value)" name="fontStyle" aria-label="Font Style" #group="matButtonToggleGroup">
+        <mat-button-toggle value="start">Activate</mat-button-toggle>
+        <mat-button-toggle value="stop">Deactivate</mat-button-toggle>
+        <mat-button-toggle value="shutdown">Shutdown</mat-button-toggle>
+      </mat-button-toggle-group>
+    </p>
+  </mat-card-content>
+</mat-card>

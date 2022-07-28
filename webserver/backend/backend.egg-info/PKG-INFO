@@ -1,0 +1,49 @@
+Metadata-Version: 2.1
+Name: backend
+Version: 0.0.0
+Summary: This is backend project
+Home-page: http://www.marlysys.com
+Author: Marlysys
+Author-email: hdumcke@marlysys.com
+License-File: LICENSE
+License-File: AUTHORS
+
+*********************
+Welcome to 'backend'
+*********************
+
+=====
+Usage
+=====
+
+Go to project directory:
+    $ cd backend
+
+Work on the Python virtual environment with:
+    $ workon backend
+
+Launch your client with:
+    $ backend
+
+=====
+Tests
+=====
+
+Launch your Python tests and PEP8 syntax checking with:
+    $ tox                # Launch all
+    $ tox -e py27        # Launch only python2.7 unittests
+    $ tox -e pep8        # Launch only pep8 checks
+
+=============
+Documentation
+=============
+
+Generate documentation:
+    $ tox -e docs
+
+Documentation source is available under:
+    doc/source
+
+Documentation is generated under :
+    doc/build
+
