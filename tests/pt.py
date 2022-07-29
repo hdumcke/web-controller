@@ -191,6 +191,7 @@ class PupTest(threading.Thread):
 
     def deactivate_robot(self):
         self.send_udp_command(self.rest)
+        time.sleep(0.1)
         self.send_udp_command(self.activate)
 
     def shutdown_robot(self):
@@ -198,6 +199,7 @@ class PupTest(threading.Thread):
 
     def toggle_rest_trot(self):
         self.send_udp_command(self.trot)
+        time.sleep(0.1)
         self.send_udp_command(self.rest)
         if self.current_robot_state == 0:
             self.current_robot_state = 1
@@ -210,6 +212,7 @@ class PupTest(threading.Thread):
         # self.send_udp_command(self.trot)
         # self.send_udp_command(self.rest)
         self.send_udp_command(self.raise_body)
+        time.sleep(0.1)
         self.send_udp_command(self.rest)
         # self.send_udp_command("1".encode())
         # self.send_udp_command("2".encode())
@@ -219,14 +222,17 @@ class PupTest(threading.Thread):
         # self.send_udp_command(self.trot)
         # self.send_udp_command(self.rest)
         self.send_udp_command(self.lower_body)
+        time.sleep(0.1)
         self.send_udp_command(self.rest)
 
     def roll_the_body_left(self):
         self.send_udp_command(self.roll_body_left)
+        time.sleep(0.1)
         self.send_udp_command(self.rest)
 
     def roll_the_body_right(self):
         self.send_udp_command(self.roll_body_right)
+        time.sleep(0.1)
         self.send_udp_command(self.rest)
 
     def do_yaw_left_mid(self):
