@@ -1,0 +1,10 @@
+# This test tests basic activate/deactivate
+# it calls shutdown at the end, meaning minipupper needs to be restarted to perform other tests
+1=Activate Robot
+25=Wait
+23=Deactivate
+25=Wait
+1=Activate Robot
+25=Wait
+23=Deactivate
+25=Wait

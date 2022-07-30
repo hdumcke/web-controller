@@ -6,7 +6,6 @@ import socket
 import sys
 import threading
 import time
-import pdb
 
 
 class PupTest(threading.Thread):
@@ -23,11 +22,14 @@ class PupTest(threading.Thread):
     python3 pt.py -i 192.168.2.228
     """
 
-    def __init__(self, ip_address='192.168.2.228', udp_port=8830):
+    def __init__(self, ip_address='192.168.2.228', udp_port=8830,
+                 file_name=None, wait_time=1000):
         """
 
         :param ip_address: Robot's IP Address
         :param udp_port: Robot's UDP Port
+        :param file_name: File containing UDP commands
+        :param wait_time: time that wait command will wait in milliseconds
         """
 
         # UDP Action Packets
@@ -55,8 +57,8 @@ class PupTest(threading.Thread):
         self.roll_body_left = self.deactivate.copy()
         self.roll_body_left['dpadx'] = -1
 
-        self.roll_body_left = self.deactivate.copy()
-        self.roll_body_left['dpadx'] = 1
+        self.roll_body_right = self.deactivate.copy()
+        self.roll_body_right['dpadx'] = 1
 
         self.move_forward_fast = self.deactivate.copy()
         self.move_forward_fast['ly'] = 1
@@ -112,6 +114,10 @@ class PupTest(threading.Thread):
         # initialize threading parent
         threading.Thread.__init__(self)
 
+
+        # initialize threading parent
+        threading.Thread.__init__(self)
+
         # create a thread to get next activity
         self.command_input_thread = threading.Thread(target=self._get_next_command)
         self.command_input_thread.daemon = True
@@ -124,6 +130,9 @@ class PupTest(threading.Thread):
 
         self.ip_address = ip_address
         self.udp_port = udp_port
+
+        self.file_name = file_name
+        self.wait_time = wait_time
 
         # When active command is received, set to True
         self.active = False
@@ -149,7 +158,8 @@ class PupTest(threading.Thread):
                               18: self.do_move_back_slow, 19: self.do_move_left_fast,
                               20: self.do_move_left_slow, 21: self.do_move_right_fast,
                               22: self.do_move_right_slow, 23: self.deactivate_robot,
-                              24: self.shutdown_robot,
+                              24: self.shutdown_robot, 25: self.kill_time,
+                              99: self.out_of_here,
                               }
 
         self.the_command = None
@@ -159,14 +169,12 @@ class PupTest(threading.Thread):
         while True:
             try:
                 if len(self.the_deque):
+                    print(f'Processing Command: {self.the_command}')
                     self.the_command = self.the_deque.popleft()
-                    print(f'THE COMMAND: {self.the_command}')
 
                 if self.the_command:
-                    try:
-                        self.exec_commands[self.the_command]()
-                    except TypeError:
-                        print('x')
+                    self.exec_commands[self.the_command]()
+
                 time.sleep(.001)
 
             except KeyboardInterrupt:
@@ -183,23 +191,16 @@ class PupTest(threading.Thread):
             "11=Pitch Down Mid\t12=Pitch Down Max\t13=Pitch Up Mid\t\t14=Pitch Up Max\n")
         print("15=Forward Fast\t\t16=Forward Slow\t\t17=Reverse Fast\t\t18=Reverse "
               "Slow")
-        print("19=Left Fast\t\t20=Left Slow\t\t21=Right Fast\t\t22=Right Slow\n")
-        print("23=Deactivate Robot\t24=Shutdown Robot")
+        print("19=Left Fast\t\t20=Left Slow\t\t21=Right Fast\t\t22=Right Slow")
+        print("23=Deactivate\t\t24=Shutdown")
 
     def activate_robot(self):
-        self.send_udp_command(self.activate)
-
-    def deactivate_robot(self):
         self.send_udp_command(self.rest)
         time.sleep(0.1)
         self.send_udp_command(self.activate)
 
-    def shutdown_robot(self):
-        self.send_udp_command(self.shutdown)
-
     def toggle_rest_trot(self):
         self.send_udp_command(self.trot)
-        time.sleep(0.1)
         self.send_udp_command(self.rest)
         if self.current_robot_state == 0:
             self.current_robot_state = 1
@@ -208,31 +209,31 @@ class PupTest(threading.Thread):
             self.current_robot_state = 0
             print("Robot in Rest Mode")
 
+    def deactivate_robot(self):
+        self.send_udp_command(self.deactivate)
+        time.sleep(0.1)
+        self.send_udp_command(self.activate)
+
     def raise_the_body(self):
         # self.send_udp_command(self.trot)
         # self.send_udp_command(self.rest)
         self.send_udp_command(self.raise_body)
-        time.sleep(0.1)
         self.send_udp_command(self.rest)
         # self.send_udp_command("1".encode())
         # self.send_udp_command("2".encode())
-
 
     def lower_the_body(self):
         # self.send_udp_command(self.trot)
         # self.send_udp_command(self.rest)
         self.send_udp_command(self.lower_body)
-        time.sleep(0.1)
         self.send_udp_command(self.rest)
 
     def roll_the_body_left(self):
         self.send_udp_command(self.roll_body_left)
-        time.sleep(0.1)
         self.send_udp_command(self.rest)
 
     def roll_the_body_right(self):
         self.send_udp_command(self.roll_body_right)
-        time.sleep(0.1)
         self.send_udp_command(self.rest)
 
     def do_yaw_left_mid(self):
@@ -283,6 +284,16 @@ class PupTest(threading.Thread):
     def do_move_back_fast(self):
         self.send_udp_command(self.move_back_fast)
 
+    def kill_time(self):
+        time.sleep(self.wait_time)
+
+    def shutdown_robot(self):
+        self.send_udp_command(self.shutdown)
+
+    def out_of_here(self):
+        self._stop_threads()
+        sys.exit(0)
+
     def send_udp_command(self, command):
 
         message = msgpack.packb(command, use_bin_type=True)
@@ -304,9 +315,51 @@ class PupTest(threading.Thread):
         while self._is_running():
             # print("\nCOMMANDS: ")
             # self.list_commands()
+            command = None
 
+            # if file was specified, get commands from the file
             try:
-                command = input("Enter a command number (0 - 24) or Control-C to quit: ")
+                if self.file_name:
+
+                    command_list = []
+                    with open(self.file_name, encoding="utf-8") as f:
+                        while (line := f.readline()):
+                            if not len(line.strip()):
+                                continue
+                            if line.lstrip()[0] == '#':
+                                continue
+                            command_list.append(int(line.lstrip().replace('=', ' ').split(' ')[0]))
+                        command_list.append(99)
+                        print(f'Commands Read From File: {command_list}')
+                    for command in command_list:
+
+                        # activate and toggle mode do not need to be run in a loop
+                        if command == 1:
+                            if not self.active:
+                                self.activate_robot()
+                                self.active = True
+                            else:
+                                print("\nRobot has already been activated.")
+                        elif command == 2:
+                            if self.active:
+                                self.toggle_rest_trot()
+                            else:
+                                print("Enter 1 to Activate the robot!")
+                        elif command == 23:
+                            self.deactivate_robot()
+                            self.active = False
+                        elif command == 25:
+                            time.sleep(self.wait_time / 1000)
+                            print(f"Killing time for {self.wait_time/1000} seconds")
+                        elif command == 99:
+                            print("Exiting in 5 seconds. Please wait ...\n\n")
+                            time.sleep(5)
+                        self.the_deque.append(command)
+                    break
+
+                else:
+                    command = input(
+                        "Enter a command number (0 - 24) or Control-C to quit: ")
                 command = int(command)
                 if command == 0:
                     self.list_commands()
@@ -324,11 +377,7 @@ class PupTest(threading.Thread):
                         else:
                             print("Enter 1 to Activate the robot!")
                     elif command == 23:
-                        if self.active:
-                            self.deactivate_robot()
-                            self.active = False
-                        else:
-                            print("\nRobot has already been deactivated.")
+                        self.deactivate_bot()
                     else:
                         if not self.active:
                             print("Enter 1 to Activate the robot!")
@@ -336,7 +385,7 @@ class PupTest(threading.Thread):
                             self.the_deque.append(command)
                 time.sleep(.001)
             except KeyboardInterrupt:
-                self._stop_threads()
+                raise KeyboardInterrupt
 
 
 def pt():
@@ -346,12 +395,26 @@ def pt():
     parser.add_argument("-p", dest="udp_port", default="8830",
                         help="Mini Pupper UDP Port Number")
 
+    parser.add_argument("-f", dest="file_name", default="None",
+                        help="Command File containing commands")
+
+    parser.add_argument("-w", dest="wait_time", default="1000",
+                        help="Wait command wait time in milliseconds")
+
     args = parser.parse_args()
 
+    if args.file_name == "None":
+        fn = None
+    else:
+        fn = args.file_name
     kw_options = {'ip_address': args.ip_address,
-                  'udp_port': int(args.udp_port)}
+                  'udp_port': int(args.udp_port),
+                  'file_name': fn,
+                  'wait_time': int(args.wait_time)
+                  }
 
     PupTest(**kw_options)
+    sys.exit(0)
 
 
 # signal handler function called when Control-C occurs
