@@ -17,7 +17,7 @@
 13=Pitch Up Mid	
 14=Pitch Up Max
 15=Forward Fast
-16=Forward Slowi
+16=Forward Slow
 17=Reverse Fast
 18=Reverse Slow
 19=Left Fast

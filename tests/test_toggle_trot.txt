@@ -1,0 +1,12 @@
+# This test tests toggeling trot mode
+1=Activate Robot
+25=Wait
+2=Toggle Rest/Trot States
+25=Wait
+2=Toggle Rest/Trot States
+25=Wait
+2=Toggle Rest/Trot States
+25=Wait
+2=Toggle Rest/Trot States
+25=Wait
+23=Deactivate

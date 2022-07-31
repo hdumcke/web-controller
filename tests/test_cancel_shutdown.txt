@@ -1,0 +1,9 @@
+# This test tests canceling shutdown
+# it calls shutdown and calls activate before the end of 3 seconds
+1=Activate Robot
+24=Shutdown
+25=Wait
+1=Activate Robot
+25=Wait
+23=Deactivate
+25=Wait

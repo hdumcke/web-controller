@@ -159,6 +159,7 @@ class PupTest(threading.Thread):
                               20: self.do_move_left_slow, 21: self.do_move_right_fast,
                               22: self.do_move_right_slow, 23: self.deactivate_robot,
                               24: self.shutdown_robot, 25: self.kill_time,
+                              98: self.clear,
                               99: self.out_of_here,
                               }
 
@@ -169,13 +170,18 @@ class PupTest(threading.Thread):
         while True:
             try:
                 if len(self.the_deque):
-                    print(f'Processing Command: {self.the_command}')
                     self.the_command = self.the_deque.popleft()
+                    if self.the_command == 98:
+                        self.the_command = None
+                    else:
+                        print(f'Processing Command: {self.the_command}')
 
                 if self.the_command:
                     self.exec_commands[self.the_command]()
 
-                time.sleep(.001)
+                # Message rate expected by minipupper
+                MESSAGE_RATE = 20
+                time.sleep(1 / MESSAGE_RATE)
 
             except KeyboardInterrupt:
                 self._stop_threads()
@@ -290,6 +296,9 @@ class PupTest(threading.Thread):
     def shutdown_robot(self):
         self.send_udp_command(self.shutdown)
 
+    def clear(self):
+        pass
+
     def out_of_here(self):
         self._stop_threads()
         sys.exit(0)
@@ -335,25 +344,32 @@ class PupTest(threading.Thread):
 
                         # activate and toggle mode do not need to be run in a loop
                         if command == 1:
+                            print(f'Processing Command: {command}')
                             if not self.active:
                                 self.activate_robot()
                                 self.active = True
                             else:
                                 print("\nRobot has already been activated.")
+                            command = 98
                         elif command == 2:
+                            print(f'Processing Command: {command}')
                             if self.active:
                                 self.toggle_rest_trot()
                             else:
                                 print("Enter 1 to Activate the robot!")
+                            command = 98
                         elif command == 23:
+                            print(f'Processing Command: {command}')
                             self.deactivate_robot()
                             self.active = False
+                            command = 98
                         elif command == 25:
+                            print(f'Processing Command: {command}')
                             time.sleep(self.wait_time / 1000)
                             print(f"Killing time for {self.wait_time/1000} seconds")
+                            continue
                         elif command == 99:
-                            print("Exiting in 5 seconds. Please wait ...\n\n")
-                            time.sleep(5)
+                            print("Exiting\n\n")
                         self.the_deque.append(command)
                     break
 

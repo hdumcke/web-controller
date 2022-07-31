@@ -2,5 +2,7 @@
 # it calls shutdown at the end, meaning minipupper needs to be restarted to perform other tests
 1=Activate Robot
 24=Shutdown
-24=Shutdown
-24=Shutdown
+# wait 3 seconds until minipupper is shut down. Action can be cancedled within 3 seconds
+25=Wait
+25=Wait
+25=Wait

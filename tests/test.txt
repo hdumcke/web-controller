@@ -1,3 +1,2 @@
-# This test tests basic shutdown
-# it calls shutdown at the end, meaning minipupper needs to be restarted to perform other tests
-1=Activate Robot
+7=do_yaw_left_mid
+25
