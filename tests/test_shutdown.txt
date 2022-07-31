@@ -1,5 +1,7 @@
 # This test tests basic shutdown
 # it calls shutdown at the end, meaning minipupper needs to be restarted to perform other tests
+23=Deactivate
+25=Wait
 1=Activate Robot
 24=Shutdown
 # wait 3 seconds until minipupper is shut down. Action can be cancedled within 3 seconds

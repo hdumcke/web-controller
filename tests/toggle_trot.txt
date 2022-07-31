@@ -1,7 +1,13 @@
-# utility script to change trot status
+# utility to put robot in rest mode
+23=Deactivate
+25=Wait
 1=Activate Robot
 25=Wait
-2=Toggle Rest/Trot States
+26=Set Rest Mode
+25=Wait
+2=Set Trot Mode
 25=Wait
 23=Deactivate
+25=Wait
+1=Activate Robot
 25=Wait

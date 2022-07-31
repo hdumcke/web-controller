@@ -1,2 +1,18 @@
-7=do_yaw_left_mid
-25
+# This test tests toggeling trot mode
+23=Deactivate
+25=Wait
+1=Activate Robot
+25=Wait
+3=Raise Body
+25=Wait
+25=Wait
+4=Lower Body
+25=Wait
+25=Wait
+26=Set Rest Mode
+25=Wait
+25=Wait
+23=Deactivate
+25=Wait
+1=Activate Robot
+25=Wait

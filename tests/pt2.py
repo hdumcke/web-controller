@@ -134,11 +134,6 @@ class PupTest(threading.Thread):
         self.file_name = file_name
         self.wait_time = wait_time
 
-        # When active command is received, set to True
-        self.active = False
-
-        # robot state 0 = rest, 1 = trot
-        self.current_robot_state = 0
         # create a UDP client
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         print("Mini Pupper Exerciser version 1.0")
@@ -147,7 +142,7 @@ class PupTest(threading.Thread):
 
         # a dictionary of commands and handler functions
         self.exec_commands = {0: self.list_commands, 1: self.activate_robot,
-                              2: self.toggle_rest_trot, 3: self.raise_the_body,
+                              2: self.set_trot_mode, 3: self.raise_the_body,
                               4: self.lower_the_body, 5: self.roll_the_body_left,
                               6: self.roll_the_body_right, 7: self.do_yaw_left_mid,
                               8: self.do_yaw_left_max, 9: self.do_yaw_right_mid,
@@ -159,6 +154,7 @@ class PupTest(threading.Thread):
                               20: self.do_move_left_slow, 21: self.do_move_right_fast,
                               22: self.do_move_right_slow, 23: self.deactivate_robot,
                               24: self.shutdown_robot, 25: self.kill_time,
+                              26: self.set_rest_mode,
                               98: self.clear,
                               99: self.out_of_here,
                               }
@@ -190,7 +186,7 @@ class PupTest(threading.Thread):
 
     @staticmethod
     def list_commands():
-        print('0=List Commands\t\t1=Activate Robot\t2=Toggle Rest/Trot States\n')
+        print('0=List Commands\t\t1=Activate Robot\t2=Set Trot Mode\n')
         print("3=Raise Body\t\t4=Lower Body\t\t5=Roll Body Left\t6=Roll Body Right")
         print("7=Yaw Left Mid\t\t8=Yaw Left Max\t\t9=Yaw Right Mid\t\t10=Yaw Right Max")
         print(
@@ -198,41 +194,25 @@ class PupTest(threading.Thread):
         print("15=Forward Fast\t\t16=Forward Slow\t\t17=Reverse Fast\t\t18=Reverse "
               "Slow")
         print("19=Left Fast\t\t20=Left Slow\t\t21=Right Fast\t\t22=Right Slow")
-        print("23=Deactivate\t\t24=Shutdown")
+        print("23=Deactivate\t\t24=Shutdown\t\t26=Set Rest Mode")
 
     def activate_robot(self):
-        self.send_udp_command(self.rest)
-        time.sleep(0.1)
         self.send_udp_command(self.activate)
 
-    def toggle_rest_trot(self):
-        self.send_udp_command(self.trot)
+    def set_rest_mode(self):
         self.send_udp_command(self.rest)
-        if self.current_robot_state == 0:
-            self.current_robot_state = 1
-            print("Robot in Trot Mode")
-        else:
-            self.current_robot_state = 0
-            print("Robot in Rest Mode")
+
+    def set_trot_mode(self):
+        self.send_udp_command(self.trot)
 
     def deactivate_robot(self):
         self.send_udp_command(self.deactivate)
-        time.sleep(0.1)
-        self.send_udp_command(self.activate)
 
     def raise_the_body(self):
-        # self.send_udp_command(self.trot)
-        # self.send_udp_command(self.rest)
         self.send_udp_command(self.raise_body)
-        self.send_udp_command(self.rest)
-        # self.send_udp_command("1".encode())
-        # self.send_udp_command("2".encode())
 
     def lower_the_body(self):
-        # self.send_udp_command(self.trot)
-        # self.send_udp_command(self.rest)
         self.send_udp_command(self.lower_body)
-        self.send_udp_command(self.rest)
 
     def roll_the_body_left(self):
         self.send_udp_command(self.roll_body_left)
@@ -343,27 +323,7 @@ class PupTest(threading.Thread):
                     for command in command_list:
 
                         # activate and toggle mode do not need to be run in a loop
-                        if command == 1:
-                            print(f'Processing Command: {command}')
-                            if not self.active:
-                                self.activate_robot()
-                                self.active = True
-                            else:
-                                print("\nRobot has already been activated.")
-                            command = 98
-                        elif command == 2:
-                            print(f'Processing Command: {command}')
-                            if self.active:
-                                self.toggle_rest_trot()
-                            else:
-                                print("Enter 1 to Activate the robot!")
-                            command = 98
-                        elif command == 23:
-                            print(f'Processing Command: {command}')
-                            self.deactivate_robot()
-                            self.active = False
-                            command = 98
-                        elif command == 25:
+                        if command == 25:
                             print(f'Processing Command: {command}')
                             time.sleep(self.wait_time / 1000)
                             print(f"Killing time for {self.wait_time/1000} seconds")
@@ -382,23 +342,13 @@ class PupTest(threading.Thread):
                 else:
                     # activate and toggle mode do not need to be run in a loop
                     if command == 1:
-                        if not self.active:
-                            self.activate_robot()
-                            self.active = True
-                        else:
-                            print("\nRobot has already been activated.")
+                        self.activate_robot()
                     elif command == 2:
-                        if self.active:
-                            self.toggle_rest_trot()
-                        else:
-                            print("Enter 1 to Activate the robot!")
+                        self.toggle_rest_trot()
                     elif command == 23:
                         self.deactivate_bot()
                     else:
-                        if not self.active:
-                            print("Enter 1 to Activate the robot!")
-                        else:
-                            self.the_deque.append(command)
+                        self.the_deque.append(command)
                 time.sleep(.001)
             except KeyboardInterrupt:
                 raise KeyboardInterrupt

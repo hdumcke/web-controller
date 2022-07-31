@@ -1,7 +1,9 @@
 # This test tests toggeling trot mode
+23=Deactivate
+25=Wait
 1=Activate Robot
 25=Wait
-2=Toggle Rest/Trot States
+2=Set Trot Mode
 25=Wait
 15=Forward Fast
 25=Wait
@@ -11,6 +13,9 @@
 25=Wait
 21=Right Fast
 25=Wait
-2=Toggle Rest/Trot States
+26=Set Rest Mode
 25=Wait
 23=Deactivate
+25=Wait
+1=Activate Robot
+25=Wait
