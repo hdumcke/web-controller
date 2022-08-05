@@ -1,6 +1,5 @@
 import argparse
 from collections import deque
-import msgpack
 import signal
 from UDPComms import Publisher
 import sys
@@ -30,6 +29,8 @@ class PupTest(threading.Thread):
         """
 
         MESSAGE_RATE = 20
+        self.min_msg = 5
+        self.send_count = 0
         # UDP Action Packets
         self.deactivate = {
             "ly": 0,
@@ -169,15 +170,15 @@ class PupTest(threading.Thread):
 
         while True:
             try:
-                if len(self.the_deque):
+                if len(self.the_deque) and self.send_count > self.min_msg:
                     self.the_command = self.the_deque.popleft()
+                    self.send_count = 0
                     if self.the_command == 98:
                         self.the_command = None
-                    else:
-                        print(f'Processing Command: {self.the_command}')
 
                 if self.the_command:
                     self.exec_commands[self.the_command]()
+                    self.send_count += 1
 
                 # Message rate expected by minipupper
                 time.sleep(1 / MESSAGE_RATE)
@@ -219,11 +220,9 @@ class PupTest(threading.Thread):
 
     def roll_the_body_left(self):
         self.pub.send(self.roll_body_left)
-        self.pub.send(self.rest)
 
     def roll_the_body_right(self):
         self.pub.send(self.roll_body_right)
-        self.pub.send(self.rest)
 
     def do_yaw_left_mid(self):
         self.pub.send(self.yaw_left_mid)
@@ -305,50 +304,40 @@ class PupTest(threading.Thread):
 
             # if file was specified, get commands from the file
             try:
-                if self.file_name:
-
-                    command_list = []
-                    # wait until a few default messages are sent
-                    time.sleep(.2)
-                    with open(self.file_name, encoding="utf-8") as f:
-                        while (line := f.readline()):
-                            if not len(line.strip()):
-                                continue
-                            if line.lstrip()[0] == '#':
-                                continue
-                            command_list.append(int(line.lstrip().replace('=', ' ').split(' ')[0]))
-                        command_list.append(99)
-                        print(f'Commands Read From File: {command_list}')
-                    for command in command_list:
-
-                        # activate and toggle mode do not need to be run in a loop
-                        if command == 25:
-                            print(f'Processing Command: {command}')
-                            time.sleep(self.wait_time / 1000)
-                            print(f"Killing time for {self.wait_time/1000} seconds")
+                command_list = []
+                echo_list = []
+                echo_cmd = 1000
+                # wait until a few default messages are sent
+                time.sleep(.2)
+                with open(self.file_name, encoding="utf-8") as f:
+                    while (line := f.readline()):
+                        if not len(line.strip()):
                             continue
-                        elif command == 99:
-                            print("Exiting\n\n")
-                        self.the_deque.append(command)
-                    break
+                        if line.lstrip()[0:4] == 'echo':
+                            command_list.append(echo_cmd)
+                            echo_list.append(line.lstrip()[5:])
+                            echo_cmd += 1
+                            continue
+                        if line.lstrip()[0] == '#':
+                            continue
+                        command_list.append(int(line.lstrip().replace('=', ' ').split(' ')[0]))
+                    command_list.append(99)
+                    print(f'Commands Read From File: {command_list}')
+                for command in command_list:
 
-                else:
-                    command = input(
-                        "Enter a command number (0 - 24) or Control-C to quit: ")
-                command = int(command)
-                if command == 0:
-                    self.list_commands()
-                else:
                     # activate and toggle mode do not need to be run in a loop
-                    if command == 1:
-                        self.activate_robot()
-                    elif command == 2:
-                        self.toggle_rest_trot()
-                    elif command == 23:
-                        self.deactivate_bot()
-                    else:
-                        self.the_deque.append(command)
-                time.sleep(.001)
+                    if command == 25:
+                        #print(f'Processing Command: {command}')
+                        time.sleep(self.wait_time / 1000)
+                        #print(f"Killing time for {self.wait_time/1000} seconds")
+                        continue
+                    elif command == 99:
+                        print("Exiting\n\n")
+                    elif command >= 1000:
+                        print(f'>>>>>>>>> {echo_list[command-1000]}')
+                        continue
+                    self.the_deque.append(command)
+
             except KeyboardInterrupt:
                 raise KeyboardInterrupt
 
@@ -367,7 +356,8 @@ def pt():
     args = parser.parse_args()
 
     if args.file_name == "None":
-        fn = None
+        print("missing parameter file_name")
+        sys.exit(1)
     else:
         fn = args.file_name
     kw_options = {'udp_port': int(args.udp_port),

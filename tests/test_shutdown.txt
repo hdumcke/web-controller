@@ -3,8 +3,10 @@
 23=Deactivate
 25=Wait
 1=Activate Robot
+echo Robot should show "walk.png"
 24=Shutdown
 # wait 3 seconds until minipupper is shut down. Action can be cancedled within 3 seconds
 25=Wait
 25=Wait
 25=Wait
+echo Robot should be shut down
