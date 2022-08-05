@@ -140,7 +140,7 @@ class PupTest(threading.Thread):
         self.wait_time = wait_time
 
         # create a UDP client
-        self.pub = Publisher(8830, 65530)
+        self.pub = Publisher(8830, 65520)
         print("Mini Pupper Exerciser version 1.0")
         print()
         print(f'Port = {self.udp_port}')
