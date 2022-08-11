@@ -21,7 +21,7 @@ class Joystick(threading.Thread):
 
     def __init__(self):
         # used for debugging
-        self.write_log = True
+        self.write_log = False
         self.publish = True
 
         MESSAGE_RATE = 20
