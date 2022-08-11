@@ -3,3 +3,7 @@ webserver/backend/backend.egg-info/
 webserver/backend/backend/__pycache__/
 webserver/backend/backend/controller/__pycache__/
 webserver/backend/build/
+joystick_sim/joystick_sim.egg-info
+joystick_sim/joystick_sim/__pycache__
+joystick_sim/.eggs
+joystick_sim/build/

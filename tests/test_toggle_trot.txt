@@ -1,32 +1,25 @@
 # This test tests toggeling trot mode
-23=Deactivate
 1=Activate Robot
 echo Robot should show "walk.png"
 25=Wait
 2=Set Trot Mode
 echo Robot should be in trot mode
 25=Wait
-23=Deactivate
 2=Set Trot Mode
 echo Robot should be in rest mode
 25=Wait
-23=Deactivate
 2=Set Trot Mode
 echo Robot should be in trot mode
 25=Wait
-23=Deactivate
 2=Set Trot Mode
 echo Robot should be in rest mode
 25=Wait
-23=Deactivate
 2=Set Trot Mode
 echo Robot should be in trot mode
 25=Wait
-23=Deactivate
 2=Set Trot Mode
 echo Robot should be in rest mode
 25=Wait
-23=Deactivate
 1=Activate Robot
 echo Robot should show "notconnect.png"
 25=Wait

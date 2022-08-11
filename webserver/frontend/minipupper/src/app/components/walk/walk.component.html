@@ -4,10 +4,8 @@
     <mat-slider (input)="onChange('vel_y', $event.value)" vertical min="-100" max="100" step="1" [(value)]="vely" thumbLabel=True></mat-slider>
     <mat-slider (input)="onChange('vel_x', $event.value)" min="-100" max="100" step="1" [(value)]="velx" thumbLabel=True></mat-slider>
     <p>
-      <mat-button-toggle-group (change)="onClick($event.value)" name="fontStyle" aria-label="Font Style" #group="matButtonToggleGroup">
-        <mat-button-toggle value="start">Start</mat-button-toggle>
-        <mat-button-toggle value="stop">Stop</mat-button-toggle>
-      </mat-button-toggle-group>
-    </p>
+      <div class="button-activate">
+	<button mat-raised-button (click)="onClick('toggle')">Walk/Rest</button>
+      </div>
   </mat-card-content>
 </mat-card>

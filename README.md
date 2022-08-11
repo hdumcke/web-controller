@@ -13,4 +13,4 @@ Replaces PS4 joystick by a web GUI that can be run on a smartphone
 - reboot
 
 ## Run
-Point a web browser to http://<ip address of minipupper>:8080
+Point a web browser to http://x.x.x.x:8080 where xx.xx.xx.xx is the IP address of your minipupper

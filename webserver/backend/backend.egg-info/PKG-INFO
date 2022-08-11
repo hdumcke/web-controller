@@ -1,10 +1,9 @@
 Metadata-Version: 2.1
 Name: backend
-Version: 0.0.0
+Version: 0.1.0.dev33
 Summary: This is backend project
-Home-page: http://www.marlysys.com
-Author: Marlysys
-Author-email: hdumcke@marlysys.com
+Home-page: https://github.com/hdumcke
+Author: Horst Dumcke
 License-File: LICENSE
 License-File: AUTHORS
 

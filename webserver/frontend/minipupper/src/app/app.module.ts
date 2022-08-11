@@ -13,6 +13,7 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DanceComponent } from './components/dance/dance.component';
 import { WalkComponent } from './components/walk/walk.component';
+import { JumpComponent } from './components/jump/jump.component';
 import { SchematicsNavigationComponent } from './schematics/schematics-navigation/schematics-navigation.component';
 import { LayoutModule } from '@angular/cdk/layout';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -27,6 +28,7 @@ import { PupperComponent } from './components/pupper/pupper.component';
     AppComponent,
     DanceComponent,
     WalkComponent,
+    JumpComponent,
     SchematicsNavigationComponent,
     PupperComponent
   ],

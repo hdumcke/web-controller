@@ -1,4 +1,2 @@
 # utility script to change activation status
-23=Deactivate
-25=Wait
 1=Activate Robot

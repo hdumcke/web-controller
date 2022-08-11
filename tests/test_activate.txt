@@ -1,16 +1,13 @@
 # This test tests basic activate/deactivate
-23=Deactivate
 1=Activate Robot
 echo Robot should show "walk.png"
-23=Deactivate
+25=Wait
 1=Activate Robot
 echo Robot should show "notconnect.png"
 25=Wait
-23=Deactivate
 1=Activate Robot
 echo Robot should show "walk.png"
 25=Wait
-23=Deactivate
 1=Activate Robot
 echo Robot should show "notconnect.png"
 25=Wait
