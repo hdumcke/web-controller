@@ -49,7 +49,7 @@ class PupTest():
                               20: self.do_move_left_slow, 21: self.do_move_right_fast,
                               22: self.do_move_right_slow,
                               24: self.shutdown_robot, 25: self.kill_time,
-                              26: self.set_rest_mode,
+                              26: self.jump,
                               }
 
         command_list = []
@@ -81,8 +81,8 @@ class PupTest():
     def activate_robot(self):
         self.joystick.push_L1()
 
-    def set_rest_mode(self):
-        self.joystick.push_R1()
+    def jump(self):
+        self.joystick.push_x()
 
     def set_trot_mode(self):
         self.joystick.push_R1()
