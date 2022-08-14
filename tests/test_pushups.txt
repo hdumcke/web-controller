@@ -4,8 +4,6 @@ echo Robot should show "walk.png"
 25=Wait
 3=Raise the Body
 3=Raise the Body
-3=Raise the Body
-3=Raise the Body
 echo Robot should have moved up
 25=Wait
 4=Lower the Body

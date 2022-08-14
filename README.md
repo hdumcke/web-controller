@@ -1,4 +1,4 @@
-# web-conroller
+# web-controller
 
 Proposal for Mangdang, work in progress. 
 
