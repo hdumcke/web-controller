@@ -8,6 +8,9 @@ echo Robot should have yawed left
 9=Do Yaw Right mid
 echo Robot should have yawed right
 25=Wait
+28=Do Yaw Neutral
+echo Robot should have moved to a neutral position
+25=Wait
 1=Activate Robot
 echo Robot should show "notconnect.png"
 25=Wait

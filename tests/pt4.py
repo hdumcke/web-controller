@@ -49,7 +49,8 @@ class PupTest():
                               20: self.do_move_left_slow, 21: self.do_move_right_fast,
                               22: self.do_move_right_slow,
                               24: self.shutdown_robot, 25: self.kill_time,
-                              26: self.jump,
+                              26: self.jump, 27: self.do_pitch_neutral, 
+                              28: self.do_yaw_neutral,
                               }
 
         command_list = []
@@ -111,17 +112,23 @@ class PupTest():
     def do_yaw_right_max(self):
         self.joystick.set_yaw(1.0)
 
+    def do_yaw_neutral(self):
+        self.joystick.set_yaw(0.0)
+
     def do_pitch_down_mid(self):
-        self.joystick.set_pitch(-0.5)
-
-    def do_pitch_down_max(self):
-        self.joystick.set_pitch(-1.0)
-
-    def do_pitch_up_mid(self):
         self.joystick.set_pitch(0.5)
 
-    def do_pitch_up_max(self):
+    def do_pitch_down_max(self):
         self.joystick.set_pitch(1.0)
+
+    def do_pitch_up_mid(self):
+        self.joystick.set_pitch(-0.5)
+
+    def do_pitch_up_max(self):
+        self.joystick.set_pitch(-1.0)
+
+    def do_pitch_neutral(self):
+        self.joystick.set_pitch(0.0)
 
     def do_move_left_slow(self):
         self.joystick.set_velocity(0.0, -0.5)

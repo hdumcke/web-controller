@@ -1,4 +1,5 @@
 import json
+import time
 from joystick_sim.joystick import Joystick
 
 
@@ -48,6 +49,10 @@ class Controller:
             if gait == 'dance' and param == 'heightminus':
                 self.joystick.adjust_height(-1)
             if gait == 'jump' and param == 'jump':
+                self.joystick.push_x()
+                time.sleep(.4)
+                self.joystick.push_x()
+                time.sleep(.4)
                 self.joystick.push_x()
             return
         self.params[gait][command] = float(param)

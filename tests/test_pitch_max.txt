@@ -8,6 +8,10 @@ echo Robot should have pitched down
 14=Do Pitch UP max
 echo Robot should have pitched up
 25=Wait
+25=Wait
+27=Do Pitch neutral
+echo Robot should have moved to neutral position
+25=Wait
 1=Activate Robot
 echo Robot should show "notconnect.png"
 25=Wait
