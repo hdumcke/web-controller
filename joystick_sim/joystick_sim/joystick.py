@@ -39,7 +39,7 @@ class Joystick(threading.Thread):
         self.the_deque = deque()
         self.the_command = None
         if self.publish:
-            self.pub = Publisher(8830, 65520)
+            self.pub = Publisher(8830)
         threading.Thread.__init__(self)
 
     def push_L1(self):
